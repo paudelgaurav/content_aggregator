@@ -36,10 +36,22 @@ class NewsList(generics.ListAPIView):
 
 
 
-#class SubscribedTopics(APIView):
- #       def get(self,request,format=None, topic = None):
-  #              user = self.request.user
-   #             subscribed = None
+class SubscribedTopics(APIView):
+        def get(self,request,format=None, topic = None):
+                user = self.request.user
+                t = get_object_or_404(Topic, slug=topic)
+                subscribed = None
+                if user.is_authenticated:
+                        if t in user.topics.all():
+                                subscribed = False
+                                user.topics.remove(t)
+                        else:
+                            subscribed = True
+                            user.topics.add(t)
 
-    #            if user.is_authenticated:
 
+                data = {
+                        'subscribed': subscribed
+                }
+
+                return Response(data)
