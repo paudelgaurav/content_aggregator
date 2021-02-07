@@ -12,3 +12,10 @@ class NewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
         fields = ['title','content','url','source','topic']
+
+class SubscribedTopicSerializer(serializers.ModelSerializer):
+    news = NewsSerializer(many=True, read_only = True)
+    
+    class Meta:
+        model = Topic
+        fields = ['title','news']

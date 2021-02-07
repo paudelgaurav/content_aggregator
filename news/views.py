@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 
 from .models import Topic,News
-from .serializers import TopicSerializer, NewsSerializer
+from .serializers import TopicSerializer, NewsSerializer,SubscribedTopicSerializer
 from .scrape import getNews
 
 class TopicList(generics.ListAPIView):
@@ -17,10 +17,18 @@ class SubscribedTopics(APIView):
 
         def get(self,request,format=None):
                 user = self.request.user
-                topics = user.topics.all()
-                t = TopicSerializer(topics, many=True)
-                return Response(t.data)
-
+                subcribed_topics = user.topics.all()
+                available_topics = Topic.objects.all()
+                avail_topics = TopicSerializer(available_topics, many=True)
+                if subcribed_topics:
+                        topics = SubscribedTopicSerializer(subcribed_topics, many=True)
+                        return Response(topics.data)
+                else:
+                        data = {
+                                "message": "You haven't subscribe to any topics",
+                                "available topics": avail_topics.data
+                        }
+                        return Response(data)
 
 class NewsList(generics.ListAPIView):
         serializer_class = NewsSerializer
@@ -36,7 +44,7 @@ class NewsList(generics.ListAPIView):
 
 
 
-class SubscribedTopics(APIView):
+class SubscribeTopic(APIView):
         def get(self,request,format=None, topic = None):
                 user = self.request.user
                 t = get_object_or_404(Topic, slug=topic)

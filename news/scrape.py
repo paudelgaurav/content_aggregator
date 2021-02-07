@@ -13,6 +13,8 @@ def doScrape(topic):
         topic_url = 'money'
     elif topic == 'trending':
         topic_url = 'opinion'
+    elif topic == 'technology':
+        topic_url = 'science-technology'
 
     url = 'https://kathmandupost.com/{0}'.format(topic_url)
     html_text = requests.get(url).text
@@ -33,6 +35,9 @@ def doSccrape(topic):
     topic_url = topic
     if topic == 'trending':
         topic_url = 'main-news'
+    if topic == 'technology':
+        return None
+
     t_url = 'https://risingnepaldaily.com/{0}'.format(topic_url)
     html_text = requests.get(t_url).text
     soup = BeautifulSoup(html_text, 'lxml')
@@ -51,6 +56,9 @@ def doScccrape(topic):
     topic_url = topic
     if topic == 'trending':
         topic_url = 'features'
+    elif topic == 'technology':
+        topic_url = 'auto-and-tech'
+
     a_url = 'https://theannapurnaexpress.com/category/{0}'.format(topic_url)
     html_text = requests.get(a_url).text
     soup = BeautifulSoup(html_text, 'lxml')
