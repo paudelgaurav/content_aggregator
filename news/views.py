@@ -47,7 +47,7 @@ class NewsList(generics.ListAPIView):
                 topic = self.kwargs['topic'].lower()
                 t = get_object_or_404(Topic, slug=topic)
                 news = t.news.all()
-                if news.exists()
+                if news.exists():
                         news.delete()
                 getNews(topic)
                 queryset = t.news.all()
