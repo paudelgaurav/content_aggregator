@@ -19,3 +19,4 @@ class SubscribedTopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topic
         fields = ['title','news']
+        extra_kwargs = {'news': {'required': False}}

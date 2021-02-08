@@ -8,6 +8,7 @@ urlpatterns = [
     path('topic/<slug:topic>/',NewsList.as_view(), name='news'),
     path('subs/',SubscribedTopics.as_view(),name='topics'),
     path('subscribe/<slug:topic>/',SubscribeTopic.as_view()),
+
     path('auth/',include('rest_framework.urls')),
     path('account/',include('rest_auth.urls')),
     path('account/register/',include('rest_auth.registration.urls'))

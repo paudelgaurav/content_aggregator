@@ -7,21 +7,29 @@ from rest_framework.views import APIView
 
 from .models import Topic,News
 from .serializers import TopicSerializer, NewsSerializer,SubscribedTopicSerializer
-from .scrape import getNews
+from .utils import getNews
 
 class TopicList(generics.ListAPIView):
         queryset = Topic.objects.all()
         serializer_class = TopicSerializer
 
+
 class SubscribedTopics(APIView):
 
         def get(self,request,format=None):
                 user = self.request.user
-                subcribed_topics = user.topics.all()
+                subscribed_topics = user.topics.all()
                 available_topics = Topic.objects.all()
                 avail_topics = TopicSerializer(available_topics, many=True)
-                if subcribed_topics:
-                        topics = SubscribedTopicSerializer(subcribed_topics, many=True)
+                if subscribed_topics:
+                        for t in subscribed_topics:
+                                news = t.news.all()
+                                if news.exists():
+                                        news.delete()
+                                        
+                                getNews(t.slug)
+                               
+                        topics = SubscribedTopicSerializer(subscribed_topics, many=True)
                         return Response(topics.data)
                 else:
                         data = {
@@ -30,11 +38,13 @@ class SubscribedTopics(APIView):
                         }
                         return Response(data)
 
+
+
 class NewsList(generics.ListAPIView):
         serializer_class = NewsSerializer
         
         def get_queryset(self):
-                topic = self.kwargs['topic']
+                topic = self.kwargs['topic'].lower()
                 t = get_object_or_404(Topic, slug=topic)
                 news = t.news.all()
                 news.delete()
@@ -47,6 +57,7 @@ class NewsList(generics.ListAPIView):
 class SubscribeTopic(APIView):
         def get(self,request,format=None, topic = None):
                 user = self.request.user
+                topic = topic.lower()
                 t = get_object_or_404(Topic, slug=topic)
                 subscribed = None
                 if user.is_authenticated:
@@ -56,7 +67,6 @@ class SubscribeTopic(APIView):
                         else:
                             subscribed = True
                             user.topics.add(t)
-
 
                 data = {
                         'subscribed': subscribed

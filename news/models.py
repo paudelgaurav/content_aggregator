@@ -6,7 +6,7 @@ from django.utils.text import slugify
 class Topic(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField(null=False, unique=True)
-    subscriber = models.ManyToManyField(User, related_name='topics',default=User)
+    subscriber = models.ManyToManyField(User, related_name='topics',blank=True)
 
 
     def __str__(self):

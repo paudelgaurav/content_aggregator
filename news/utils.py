@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from .models import Topic, News
 
 
-def doScrape(topic):
+def ScrapeKtmPost(topic):
     topic_url = topic   
     s_url = 'https://kathmandupost.com'
     if topic == 'business':
@@ -31,7 +31,7 @@ def doScrape(topic):
 
 
 
-def doSccrape(topic):
+def ScrapeRisingNepal(topic):
     topic_url = topic
     if topic == 'trending':
         topic_url = 'main-news'
@@ -52,7 +52,7 @@ def doSccrape(topic):
 
 
 
-def doScccrape(topic):
+def ScrapeAnnapurna(topic):
     topic_url = topic
     if topic == 'trending':
         topic_url = 'features'
@@ -73,6 +73,7 @@ def doScccrape(topic):
         News.objects.create(title=news_title, content=news_content,url=news_link['href'],source='Annapurna Express',topic=t)
 
 def getNews(topic):
-    doScrape(topic)
-    doSccrape(topic)
-    doScccrape(topic)
+    topic = topic.lower()
+    ScrapeKtmPost(topic)
+    ScrapeRisingNepal(topic)
+    ScrapeAnnapurna(topic)
