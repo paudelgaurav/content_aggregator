@@ -5,7 +5,7 @@ from django.utils.text import slugify
 
 class Topic(models.Model):
     title = models.CharField(max_length=100)
-    slug = models.SlugField(null=False, unique=True)
+    slug = models.SlugField(unique=True)
     subscriber = models.ManyToManyField(User, related_name='topics',blank=True)
 
 
@@ -17,7 +17,10 @@ class News(models.Model):
     title = models.CharField(max_length = 200)
     content = models.TextField()
     url = models.URLField()
-    source = models.CharField(max_length=100,default='gaurav')
+    source = models.CharField(max_length=100,default='admin')
+
+    class Meta:
+        verbose_name_plural = 'news'
 
     def __str__(self):
         return self.title
