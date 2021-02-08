@@ -33,7 +33,7 @@ class SubscribedTopics(APIView):
                         return Response(topics.data)
                 else:
                         data = {
-                                "message": "You haven't subscribe to any topics",
+                                "message": "You aren't subscriber of any topics",
                                 "available topics": avail_topics.data
                         }
                         return Response(data)
@@ -47,11 +47,11 @@ class NewsList(generics.ListAPIView):
                 topic = self.kwargs['topic'].lower()
                 t = get_object_or_404(Topic, slug=topic)
                 news = t.news.all()
-                news.delete()
+                if news.exists()
+                        news.delete()
                 getNews(topic)
                 queryset = t.news.all()
                 return queryset
-
 
 
 class SubscribeTopic(APIView):
