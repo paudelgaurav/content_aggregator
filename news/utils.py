@@ -5,9 +5,10 @@ from django.shortcuts import get_object_or_404
 
 from .models import Topic, News
 
-#Scraping The kathmandu Post
+
+# Scraping The kathmandu Post
 def ScrapeKtmPost(topic):
-    topic_url = topic   
+    topic_url = topic
     s_url = 'https://kathmandupost.com'
     if topic == 'business':
         topic_url = 'money'
@@ -18,24 +19,31 @@ def ScrapeKtmPost(topic):
 
     url = 'https://kathmandupost.com/{0}'.format(topic_url)
     html_text = requests.get(url).text
-    soup = BeautifulSoup(html_text, 'lxml')
-    newss = soup.find_all('article',class_='article-image')
+    soup = BeautifulSoup(html_text, features="lxml")
+    newss = soup.find_all('article', class_='article-image')
 
     for news in newss[:2]:
         news_title = news.find('h3').text
         news_content = news.find('p').text
-        news_link = news.find('a',href=True)
+        news_link = news.find('a', href=True)
         link = s_url+news_link['href']
         t = get_object_or_404(Topic, slug=topic)
-        News.objects.create(title=news_title,content=news_content,url=link,source='Kathmandu Post',topic=t)
+        News.objects.create(
+            title=news_title,
+            content=news_content,
+            url=link,
+            source='Kathmandu Post',
+            topic=t
+        )
 
 
-#Scraping The Rising Nepal
+# Scraping The Rising Nepal
 def ScrapeRisingNepal(topic):
     topic_url = topic
+
     if topic == 'trending':
         topic_url = 'main-news'
-    if topic == 'technology':
+    elif topic == 'technology':
         return None
 
     t_url = 'https://risingnepaldaily.com/{0}'.format(topic_url)
@@ -46,13 +54,18 @@ def ScrapeRisingNepal(topic):
     for news in newss[:2]:
         news_title = news.find('p', class_='trand').text.strip()
         news_content = news.find('p', class_='description').text.strip()
-        news_link = news.find('a',href=True)
+        news_link = news.find('a', href=True)
         t = get_object_or_404(Topic, slug=topic)
-        News.objects.create(title=news_title, content=news_content, url=news_link['href'],source='Rising Nepal',topic=t)
+        News.objects.create(
+            title=news_title,
+            content=news_content,
+            url=news_link['href'],
+            source='Rising Nepal',
+            topic=t
+        )
 
 
-
-#Scraping Annapurna Express
+# Scraping Annapurna Express
 def ScrapeAnnapurna(topic):
     topic_url = topic
     if topic == 'trending':
@@ -63,15 +76,21 @@ def ScrapeAnnapurna(topic):
     a_url = 'https://theannapurnaexpress.com/category/{0}'.format(topic_url)
     html_text = requests.get(a_url).text
     soup = BeautifulSoup(html_text, 'lxml')
-    newsss = soup.find_all('div',class_='col-md-8')
+    newsss = soup.find_all('div', class_='col-md-8')
 
     for newss in newsss[:2]:
-        news = newss.find('div',class_='article-text')
+        news = newss.find('div', class_='article-text')
         news_title = news.find('a').text
         news_content = news.find('p', class_='mainnews-content').text
-        news_link = news.find('a',href=True)
+        news_link = news.find('a', href=True)
         t = get_object_or_404(Topic, slug=topic)
-        News.objects.create(title=news_title, content=news_content,url=news_link['href'],source='Annapurna Express',topic=t)
+        News.objects.create(
+            title=news_title,
+            content=news_content,
+            url=news_link['href'],
+            source='Annapurna Express',
+            topic=t
+        )
 
 
 def getNews(topic):
