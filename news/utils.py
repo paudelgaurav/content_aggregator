@@ -5,6 +5,8 @@ from django.shortcuts import get_object_or_404
 
 from .models import Topic, News
 
+news_bulk_create_list = []
+
 
 # Scraping The kathmandu Post
 def scrape_KTM_Post(topic):
@@ -27,13 +29,16 @@ def scrape_KTM_Post(topic):
         news_content = news.find('p').text
         news_link = news.find('a', href=True)
         link = s_url+news_link['href']
-        t = get_object_or_404(Topic, slug=topic)
-        News.objects.create(
-            title=news_title,
-            content=news_content,
-            url=link,
-            source='Kathmandu Post',
-            topic=t
+
+        topic_obj = get_object_or_404(Topic, slug=topic)
+        news_bulk_create_list.append(
+            News(
+                title=news_title,
+                content=news_content,
+                url=link,
+                source='Kathmandu Post',
+                topic=topic_obj
+            )
         )
 
 
@@ -55,13 +60,16 @@ def scrape_Rising_Nepal(topic):
         news_title = news.find('p', class_='trand').text.strip()
         news_content = news.find('p', class_='description').text.strip()
         news_link = news.find('a', href=True)
-        t = get_object_or_404(Topic, slug=topic)
-        News.objects.create(
-            title=news_title,
-            content=news_content,
-            url=news_link['href'],
-            source='Rising Nepal',
-            topic=t
+
+        topic_obj = get_object_or_404(Topic, slug=topic)
+        news_bulk_create_list.append(
+            News(
+                title=news_title,
+                content=news_content,
+                url=news_link['href'],
+                source='Rising Nepal',
+                topic=topic_obj
+            )
         )
 
 
@@ -83,13 +91,16 @@ def scrape_annapurna(topic):
         news_title = news.find('a').text
         news_content = news.find('p', class_='mainnews-content').text
         news_link = news.find('a', href=True)
-        t = get_object_or_404(Topic, slug=topic)
-        News.objects.create(
-            title=news_title,
-            content=news_content,
-            url=news_link['href'],
-            source='Annapurna Express',
-            topic=t
+
+        topic_obj = get_object_or_404(Topic, slug=topic)
+        news_bulk_create_list.append(
+            News(
+                title=news_title,
+                content=news_content,
+                url=news_link['href'],
+                source='Annapurna Express',
+                topic=topic_obj
+            )
         )
 
 
@@ -98,3 +109,4 @@ def get_news(topic):
     scrape_KTM_Post(topic)
     scrape_Rising_Nepal(topic)
     scrape_annapurna(topic)
+    News.objects.bulk_create(news_bulk_create_list)
