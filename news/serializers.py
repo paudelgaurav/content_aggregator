@@ -6,7 +6,7 @@ from .models import Topic, News
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topic
-        fields = ['title', ]
+        fields = ['title', 'slug', ]
 
 
 class NewsSerializer(serializers.ModelSerializer):
@@ -18,9 +18,8 @@ class NewsSerializer(serializers.ModelSerializer):
 
 
 class SubscribedTopicSerializer(serializers.ModelSerializer):
-    news = NewsSerializer(many=True, read_only=True, )
+    news = NewsSerializer(many=True)
 
     class Meta:
         model = Topic
         fields = ['title', 'news']
-        extra_kwargs = {'news': {'required': False}}

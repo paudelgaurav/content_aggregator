@@ -7,7 +7,7 @@ from .models import Topic, News
 
 
 # Scraping The kathmandu Post
-def ScrapeKtmPost(topic):
+def scrape_KTM_Post(topic):
     topic_url = topic
     s_url = 'https://kathmandupost.com'
     if topic == 'business':
@@ -38,7 +38,7 @@ def ScrapeKtmPost(topic):
 
 
 # Scraping The Rising Nepal
-def ScrapeRisingNepal(topic):
+def scrape_Rising_Nepal(topic):
     topic_url = topic
 
     if topic == 'trending':
@@ -66,7 +66,7 @@ def ScrapeRisingNepal(topic):
 
 
 # Scraping Annapurna Express
-def ScrapeAnnapurna(topic):
+def scrape_annapurna(topic):
     topic_url = topic
     if topic == 'trending':
         topic_url = 'features'
@@ -93,8 +93,8 @@ def ScrapeAnnapurna(topic):
         )
 
 
-def getNews(topic):
+def get_news(topic):
     topic = topic.lower()
-    ScrapeKtmPost(topic)
-    ScrapeRisingNepal(topic)
-    ScrapeAnnapurna(topic)
+    scrape_KTM_Post(topic)
+    scrape_Rising_Nepal(topic)
+    scrape_annapurna(topic)
