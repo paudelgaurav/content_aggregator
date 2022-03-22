@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 
 from rest_framework import permissions
 
@@ -20,7 +21,7 @@ urlpatterns = [
    path('admin/', admin.site.urls),
 
    # api
-   path('', include('news.urls')),
+   path('api/v1/', include('news.urls')),
    # Documentation with swagger
    path(
          'docs/',
@@ -31,4 +32,5 @@ urlpatterns = [
          'redocs/',
          schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'
    ),
+   path('', RedirectView.as_view(url='/docs/', permanent=False)),
 ]

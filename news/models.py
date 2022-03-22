@@ -1,5 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Topic(models.Model):
@@ -15,7 +17,8 @@ class Topic(models.Model):
 
 class News(models.Model):
     topic = models.ForeignKey(
-        Topic, related_name='news', on_delete=models.CASCADE,
+        Topic, related_name='news',
+        on_delete=models.CASCADE,
         blank=True, null=True
     )
     title = models.CharField(max_length=200)
