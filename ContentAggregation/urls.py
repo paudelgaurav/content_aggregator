@@ -20,7 +20,7 @@ urlpatterns = [
    path('admin/', admin.site.urls),
 
    # api
-   path('', include('news.urls')), 
+   path('', include('news.urls')),
    # Documentation with swagger
    path(
          'docs/',

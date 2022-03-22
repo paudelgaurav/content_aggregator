@@ -1,6 +1,4 @@
-from django.shortcuts import get_object_or_404
-
-from rest_framework import generics
+from rest_framework.generics import ListAPIView, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -12,12 +10,12 @@ from .serializers import (
 )
 
 
-class TopicList(generics.ListAPIView):
+class TopicList(ListAPIView):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
 
 
-class NewsList(generics.ListAPIView):
+class NewsList(ListAPIView):
     serializer_class = NewsSerializer
 
     def get_queryset(self):

@@ -17,12 +17,12 @@ def scrape_KTM_Post(topic):
     elif topic == 'technology':
         topic_url = 'science-technology'
 
-    url = 'https://kathmandupost.com/{0}'.format(topic_url)
+    url = f'https://kathmandupost.com/{topic_url}'
     html_text = requests.get(url).text
     soup = BeautifulSoup(html_text, features="lxml")
-    newss = soup.find_all('article', class_='article-image')
+    news_list = soup.find_all('article', class_='article-image')
 
-    for news in newss[:2]:
+    for news in news_list[:2]:
         news_title = news.find('h3').text
         news_content = news.find('p').text
         news_link = news.find('a', href=True)
@@ -46,12 +46,12 @@ def scrape_Rising_Nepal(topic):
     elif topic == 'technology':
         return None
 
-    t_url = 'https://risingnepaldaily.com/{0}'.format(topic_url)
+    t_url = f'https://risingnepaldaily.com/{topic_url}'
     html_text = requests.get(t_url).text
     soup = BeautifulSoup(html_text, 'lxml')
-    newss = soup.find_all('div', class_='business')
+    news_list = soup.find_all('div', class_='business')
 
-    for news in newss[:2]:
+    for news in news_list[:2]:
         news_title = news.find('p', class_='trand').text.strip()
         news_content = news.find('p', class_='description').text.strip()
         news_link = news.find('a', href=True)
@@ -73,13 +73,13 @@ def scrape_annapurna(topic):
     elif topic == 'technology':
         topic_url = 'auto-and-tech'
 
-    a_url = 'https://theannapurnaexpress.com/category/{0}'.format(topic_url)
+    a_url = f'https://theannapurnaexpress.com/category/{topic_url}'
     html_text = requests.get(a_url).text
     soup = BeautifulSoup(html_text, 'lxml')
-    newsss = soup.find_all('div', class_='col-md-8')
+    news_list = soup.find_all('div', class_='col-md-8')
 
-    for newss in newsss[:2]:
-        news = newss.find('div', class_='article-text')
+    for news_data in news_list[:2]:
+        news = news_data.find('div', class_='article-text')
         news_title = news.find('a').text
         news_content = news.find('p', class_='mainnews-content').text
         news_link = news.find('a', href=True)
