@@ -23,3 +23,7 @@ username: admin
 password: admin
 
 You can find documentation of api in /docs endpoint.
+
+---
+
+##### Scraping logic is handeled in this [util](https://github.com/paudelgaurav/content_aggregator/blob/master/news/utils.py)
